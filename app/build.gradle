@@ -15,9 +15,6 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        vectorDrawables.useSupportLibrary = true
-        renderscriptTargetApi 16
-        renderscriptSupportModeEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -34,7 +31,7 @@ dependencies {
     def version_app_compat = "28.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "com.android.support:appcompat-v7:$version_app_compat"
     implementation "com.android.support:recyclerview-v7:$version_app_compat"
@@ -61,11 +58,6 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
     implementation "io.reactivex.rxjava2:rxkotlin:2.2.0"
 
-    implementation "com.github.bumptech.glide:glide:4.9.0"
-    annotationProcessor "com.github.bumptech.glide:compiler:4.9.0"
-    implementation("com.github.bumptech.glide:okhttp3-integration:4.8.0") {
-        exclude group: "glide-parent"
-    }
 
     implementation "android.arch.persistence.room:runtime:$version_room"
     implementation "android.arch.persistence.room:rxjava2:$version_room"

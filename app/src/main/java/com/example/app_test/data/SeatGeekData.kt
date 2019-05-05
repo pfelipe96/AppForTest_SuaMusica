@@ -1,7 +1,6 @@
 package com.example.app_test.data
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 import kotlin.collections.ArrayList
 
 data class SeatGeekData(
@@ -11,13 +10,14 @@ data class SeatGeekData(
 data class EventsData(
     @SerializedName("title") val title: String = "",
     @SerializedName("short_title") val shortTitle: String = "",
-    @SerializedName("announce_date") val announceData: Date? = null,
+    @SerializedName("announce_date") val announceData: String = "",
     @SerializedName("url") val url: String = "",
     @SerializedName("is_open") val isOpen: Boolean = false,
     @SerializedName("stats") val stats: StatsData? = null,
     @SerializedName("taxonomies") val taxonomies: ArrayList<TaxonomiesData> = arrayListOf(),
-    @SerializedName("venue") val venue: VenueData? = null
-
+    @SerializedName("venue") val venue: VenueData? = null,
+    var isFavorite: Boolean = false,
+    var isLoadMore: Boolean = false
 )
 
 data class StatsData(
@@ -36,6 +36,7 @@ data class VenueData(
     @SerializedName("post_code") val postCode: String = "",
     @SerializedName("name") val name: String = "",
     @SerializedName("address") val address: String = "",
+    @SerializedName("state") val state: String = "",
     @SerializedName("extended_address") val extendedAddress: String = "",
     @SerializedName("display_location") val displayLocation: String = ""
 )
