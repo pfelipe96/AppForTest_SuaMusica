@@ -106,6 +106,8 @@ class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextL
     override fun onQueryTextChange(newText: String?): Boolean = true
 
     override fun onQueryTextSubmit(query: String?): Boolean {
+        message_for_user_favorite_empty.visibility = View.GONE
+
         swipe_refresh_layout.apply {
             visibility = View.VISIBLE
             isRefreshing = true
@@ -144,6 +146,11 @@ class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextL
         }
     }
 
+    override fun clearAdapter(){
+        seatGeekAdapter?.setClearDatabase()
+        seatGeekAdapter?.notifyDataSetChanged()
+    }
+
     override fun loadMore(it: SeatGeekData) {
         seatGeekAdapter?.loadMore(it)
         flagLoadMore = true
@@ -159,6 +166,14 @@ class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextL
 
     override fun setFavorite(it: EventsData) {
         seatGeekAdapter?.setFavorite(it)
+    }
+
+    override fun setVisibilityForMessage(it: Int){
+        message_for_user_favorite_empty.visibility = it
+    }
+
+    override fun setVisibilityForSwipe(it: Int){
+        swipe_refresh_layout.visibility = it
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.app_test.mvp.presenter
 
+import android.view.View
 import com.example.app_test.data.EventsData
 import com.example.app_test.data.SeatGeekData
 import com.example.app_test.mvp.model.Model
@@ -75,10 +76,24 @@ class Presenter @Inject constructor(
         view?.swipeRefresh(true)
         try {
             val events = favoriteDatabase.controlDatabaseDAO().getAllFavorites()
-            view?.loadData(SeatGeekData(events = events as ArrayList<EventsData>))
+
+            if(events.isEmpty()) {
+                view?.setVisibilityForSwipe(View.GONE)
+                view?.swipeRefresh(false)
+                view?.clearAdapter()
+                view?.setVisibilityForMessage(View.VISIBLE)
+            }else {
+                view?.setVisibilityForMessage(View.GONE)
+                view?.loadData(SeatGeekData(events = events as ArrayList<EventsData>))
+            }
+
         } catch (e: Exception) {
             e.printStackTrace()
+
+            view?.setVisibilityForSwipe(View.GONE)
             view?.swipeRefresh(false)
+            view?.clearAdapter()
+            view?.setVisibilityForMessage(View.VISIBLE)
         }
     }
 }

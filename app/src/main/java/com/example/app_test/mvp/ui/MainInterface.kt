@@ -9,4 +9,7 @@ interface MainInterface{
     fun loadMore(it: SeatGeekData)
     fun swipeRefresh(it: Boolean)
     fun setFavorite(it: EventsData)
+    fun setVisibilityForMessage(it: Int)
+    fun setVisibilityForSwipe(it: Int)
+    fun clearAdapter()
 }

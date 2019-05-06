@@ -46,6 +46,11 @@ class SeatGeekAdapter(val events: ArrayList<EventsData>, val itemFavorite: ItemF
         notifyDataSetChanged()
     }
 
+    fun setClearDatabase(){
+        if(events.isNotEmpty())
+            events.clear()
+    }
+
     fun setProgress(it: EventsData) {
         events.add(it)
         notifyDataSetChanged()

@@ -34,9 +34,9 @@ class DetailsSeatGeek : AppCompatActivity() {
         url_text_view.text = "Site: ${eventsData.url}"
 
         if (eventsData.isOpen) {
-            is_open.text = "Aberto"
+            is_open.text = getString(R.string.opened)
         } else {
-            is_open.text = "Fechado"
+            is_open.text = getString(R.string.closed)
         }
 
         taxonomies_text_view.text = "Temas: ${createOnlyTaxonomies(eventsData.taxonomies)}"

@@ -2,4 +2,8 @@
     <string name="app_name">App for Test</string>
     <string name="search_title">Pesquisar</string>
     <string name="title_price">Preços do ticket</string>
+    <string name="message_for_user_without_list_of_favorites">Ops, você ainda não tem nenhum evento como favorito!
+    </string>
+    <string name="opened">Aberto</string>
+    <string name="closed">Fechado</string>
 </resources>

@@ -26,4 +26,16 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <TextView
+            android:id="@+id/message_for_user_favorite_empty"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="24sp"
+            android:text="@string/message_for_user_without_list_of_favorites"
+            android:drawableLeft="@drawable/ic_attach_file_grey_96dp"
+            android:visibility="gone"/>
+
 </android.support.constraint.ConstraintLayout>
