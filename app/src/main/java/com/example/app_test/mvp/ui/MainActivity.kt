@@ -15,13 +15,15 @@ import com.example.app_test.R
 import com.example.app_test.data.EventsData
 import com.example.app_test.data.SeatGeekData
 import com.example.app_test.mvp.adapter.SeatGeekAdapter
+import com.example.app_test.mvp.adapter.details.DetailsSeatGeek
+import com.example.app_test.mvp.interfaces.ItemFavorite
 import com.example.app_test.mvp.presenter.Presenter
 import com.example.app_test.utils.EndlessRecyclerViewScrollListener
 import com.example.app_test.utils.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextListener, ItemFavorite {
 
     private var search: SearchView? = null
 
@@ -49,6 +51,14 @@ class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextL
         injectDependencies()
         presenter.attachedView(this)
         initializeEndlessRecyclerView()
+
+        presenter.getListFavorites()
+
+        swipe_refresh_layout.setOnRefreshListener {
+            presenter.getListFavorites()
+        }
+
+        DetailsSeatGeek.setItemFavorite(this)
     }
 
 
@@ -76,6 +86,10 @@ class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextL
         }
     }
 
+    override fun onClickFavorite(eventsData: EventsData) {
+        presenter.managerFavorite(eventsData)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater
         menuInflater.inflate(R.menu.search, menu)
@@ -99,6 +113,9 @@ class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextL
 
         query?.let {
             instanceSearch = it
+            totalItem = 10
+            flagLoadMore = true
+
             presenter.setSearch(it, 1)
         }
 
@@ -108,7 +125,7 @@ class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextL
     }
 
     override fun loadData(it: SeatGeekData) {
-        seatGeekAdapter = SeatGeekAdapter(it.events)
+        seatGeekAdapter = SeatGeekAdapter(it.events, this)
         seatGeekAdapter?.notifyDataSetChanged()
 
         linearLayoutManager.orientation = RecyclerView.VERTICAL
@@ -121,7 +138,10 @@ class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextL
             addOnScrollListener(endlessRecyclerViewScrollListener)
         }
 
-        swipe_refresh_layout.isRefreshing = false
+        swipe_refresh_layout.apply {
+            visibility = View.VISIBLE
+            isRefreshing = false
+        }
     }
 
     override fun loadMore(it: SeatGeekData) {
@@ -136,4 +156,9 @@ class MainActivity : AppCompatActivity(), MainInterface, SearchView.OnQueryTextL
     override fun showError(it: String) {
         Toast.makeText(this@MainActivity, it, Toast.LENGTH_LONG).show()
     }
+
+    override fun setFavorite(it: EventsData) {
+        seatGeekAdapter?.setFavorite(it)
+    }
+
 }

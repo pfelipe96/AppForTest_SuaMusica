@@ -8,8 +8,10 @@ import com.example.app_test.data.EventsData
 import com.example.app_test.data.SeatGeekData
 import com.example.app_test.mvp.adapter.viewHolder.ProgressBar
 import com.example.app_test.mvp.adapter.viewHolder.SeatGeek
+import com.example.app_test.mvp.interfaces.ItemFavorite
 
-class SeatGeekAdapter(val events: ArrayList<EventsData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SeatGeekAdapter(val events: ArrayList<EventsData>, val itemFavorite: ItemFavorite) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,7 +25,7 @@ class SeatGeekAdapter(val events: ArrayList<EventsData>) : RecyclerView.Adapter<
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is SeatGeek) {
             val event = events[position]
-            holder.bind(event)
+            holder.bind(event, itemFavorite)
         }
     }
 
@@ -44,8 +46,15 @@ class SeatGeekAdapter(val events: ArrayList<EventsData>) : RecyclerView.Adapter<
         notifyDataSetChanged()
     }
 
-    fun setProgress(it: EventsData){
+    fun setProgress(it: EventsData) {
         events.add(it)
+        notifyDataSetChanged()
+    }
+
+    fun setFavorite(event: EventsData) {
+        events.filter { it.id == event.id }
+            .map { it.isFavorite = event.isFavorite }
+
         notifyDataSetChanged()
     }
 }

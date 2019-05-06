@@ -1,5 +1,6 @@
 package com.example.app_test.mvp.presenter
 
+import com.example.app_test.data.EventsData
 import com.example.app_test.data.SeatGeekData
 import com.example.app_test.mvp.ui.MainInterface
 
@@ -10,4 +11,6 @@ interface PresenterInterface{
     fun loadMore(it: SeatGeekData)
     fun setSearch(it: String, page: Int)
     fun swipeRefresh(it: Boolean)
+    fun managerFavorite(eventsData: EventsData)
+    fun getListFavorites()
 }

@@ -1,12 +1,17 @@
 package com.example.app_test.mvp.presenter
 
+import com.example.app_test.data.EventsData
 import com.example.app_test.data.SeatGeekData
 import com.example.app_test.mvp.model.Model
+import com.example.app_test.mvp.room.FavoriteDatabase
 import com.example.app_test.mvp.ui.MainInterface
+import java.lang.Exception
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
-class Presenter @Inject constructor(val model: Model): PresenterInterface{
+class Presenter @Inject constructor(
+    val model: Model,
+    val favoriteDatabase: FavoriteDatabase) : PresenterInterface {
 
     init {
         model.attachedPresenter(this)
@@ -24,10 +29,12 @@ class Presenter @Inject constructor(val model: Model): PresenterInterface{
 
     override fun loadData(it: SeatGeekData) {
         view?.loadData(it)
+        matchDatabaseWithRequest(it)
     }
 
     override fun loadMore(it: SeatGeekData) {
         view?.loadMore(it)
+        matchDatabaseWithRequest(it)
     }
 
     override fun setSearch(it: String, page: Int) {
@@ -38,8 +45,40 @@ class Presenter @Inject constructor(val model: Model): PresenterInterface{
         view?.showError(it)
     }
 
-    override fun swipeRefresh(it: Boolean){
+    override fun swipeRefresh(it: Boolean) {
         view?.swipeRefresh(it)
     }
 
+    override fun managerFavorite(eventsData: EventsData) {
+        if (eventsData.isFavorite) {
+            favoriteDatabase.controlDatabaseDAO().insertFavorite(eventsData)
+        } else {
+            favoriteDatabase.controlDatabaseDAO().deleteOnlyFavorite(eventsData.id)
+        }
+
+        view?.setFavorite(eventsData)
+    }
+
+    private fun matchDatabaseWithRequest(it: SeatGeekData) {
+        it.events.forEach {
+            try {
+                val eventsData = favoriteDatabase.controlDatabaseDAO().getOnlyFavorite(it.id)
+                if(it.id == eventsData.id)
+                    view?.setFavorite(eventsData)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    override fun getListFavorites() {
+        view?.swipeRefresh(true)
+        try {
+            val events = favoriteDatabase.controlDatabaseDAO().getAllFavorites()
+            view?.loadData(SeatGeekData(events = events as ArrayList<EventsData>))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            view?.swipeRefresh(false)
+        }
+    }
 }
